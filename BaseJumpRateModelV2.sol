@@ -20,7 +20,7 @@ contract BaseJumpRateModelV2 {
     /**
      * @notice The approximate number of blocks per year that is assumed by the interest rate model
      */
-    uint public constant blocksPerYear = 6307200;
+    uint public constant blocksPerYear = 10512000; // BSC每3秒出块
 
     /**
      * @notice The multiplier of utilization rate that gives the slope of the interest rate

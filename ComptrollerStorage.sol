@@ -145,6 +145,4 @@ contract ComptrollerV5Storage is ComptrollerV4Storage {
 
     bool public liquidatorWhiteListOn;
     mapping(address => bool) public liquidatorWhiteList;
-
-    address public bxhToken;
 }

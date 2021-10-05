@@ -83,10 +83,9 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
     // No collateralFactorMantissa may exceed this value
     uint internal constant collateralFactorMaxMantissa = 0.9e18; // 0.9
 
-    constructor(address _bxhToken) public {
+    constructor() public {
         admin = msg.sender;
         liquidatorWhiteListOn = false;
-        bxhToken = _bxhToken;
     }
 
     /*** Assets You Are In ***/
@@ -256,18 +255,18 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
      * @param actualMintAmount The amount of the underlying asset being minted
      * @param mintTokens The number of tokens being minted
      */
-    function mintVerify(address cToken, address minter, uint actualMintAmount, uint mintTokens) external {
-        // Shh - currently unused
-        cToken;
-        minter;
-        actualMintAmount;
-        mintTokens;
+    // function mintVerify(address cToken, address minter, uint actualMintAmount, uint mintTokens) external {
+    //     // // Shh - currently unused
+    //     // cToken;
+    //     // minter;
+    //     // actualMintAmount;
+    //     // mintTokens;
 
-        // Shh - we don't ever want this hook to be marked pure
-        if (false) {
-            maxAssets = maxAssets;
-        }
-    }
+    //     // // Shh - we don't ever want this hook to be marked pure
+    //     // if (false) {
+    //     //     maxAssets = maxAssets;
+    //     // }
+    // }
 
     /**
      * @notice Checks if the account should be allowed to redeem tokens in the given market
@@ -318,16 +317,16 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
      * @param redeemAmount The amount of the underlying asset being redeemed
      * @param redeemTokens The number of tokens being redeemed
      */
-    function redeemVerify(address cToken, address redeemer, uint redeemAmount, uint redeemTokens) external {
-        // Shh - currently unused
-        cToken;
-        redeemer;
+    // function redeemVerify(address cToken, address redeemer, uint redeemAmount, uint redeemTokens) external {
+    //     // // Shh - currently unused
+    //     // cToken;
+    //     // redeemer;
 
-        // Require tokens is zero or amount is also zero
-        if (redeemTokens == 0 && redeemAmount > 0) {
-            revert("redeemTokens zero");
-        }
-    }
+    //     // // Require tokens is zero or amount is also zero
+    //     // if (redeemTokens == 0 && redeemAmount > 0) {
+    //     //     revert("redeemTokens zero");
+    //     // }
+    // }
 
     /**
      * @notice Checks if the account should be allowed to borrow the underlying asset of the given market
@@ -393,17 +392,17 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
      * @param borrower The address borrowing the underlying
      * @param borrowAmount The amount of the underlying asset requested to borrow
      */
-    function borrowVerify(address cToken, address borrower, uint borrowAmount) external {
-        // Shh - currently unused
-        cToken;
-        borrower;
-        borrowAmount;
+    // function borrowVerify(address cToken, address borrower, uint borrowAmount) external {
+    //     // // Shh - currently unused
+    //     // cToken;
+    //     // borrower;
+    //     // borrowAmount;
 
-        // Shh - we don't ever want this hook to be marked pure
-        if (false) {
-            maxAssets = maxAssets;
-        }
-    }
+    //     // // Shh - we don't ever want this hook to be marked pure
+    //     // if (false) {
+    //     //     maxAssets = maxAssets;
+    //     // }
+    // }
 
     /**
      * @notice Checks if the account should be allowed to repay a borrow in the given market
@@ -442,24 +441,24 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
      * @param borrower The address of the borrower
      * @param actualRepayAmount The amount of underlying being repaid
      */
-    function repayBorrowVerify(
-        address cToken,
-        address payer,
-        address borrower,
-        uint actualRepayAmount,
-        uint borrowerIndex) external {
-        // Shh - currently unused
-        cToken;
-        payer;
-        borrower;
-        actualRepayAmount;
-        borrowerIndex;
+    // function repayBorrowVerify(
+    //     address cToken,
+    //     address payer,
+    //     address borrower,
+    //     uint actualRepayAmount,
+    //     uint borrowerIndex) external {
+    //     // Shh - currently unused
+    //     cToken;
+    //     payer;
+    //     borrower;
+    //     actualRepayAmount;
+    //     borrowerIndex;
 
-        // Shh - we don't ever want this hook to be marked pure
-        if (false) {
-            maxAssets = maxAssets;
-        }
-    }
+    //     // Shh - we don't ever want this hook to be marked pure
+    //     if (false) {
+    //         maxAssets = maxAssets;
+    //     }
+    // }
 
     /**
      * @notice Checks if the liquidation should be allowed to occur
@@ -480,6 +479,10 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
 
         if (!markets[cTokenBorrowed].isListed || !markets[cTokenCollateral].isListed) {
             return uint(Error.MARKET_NOT_LISTED);
+        }
+
+        if (liquidatorWhiteListOn) {
+            require(liquidatorWhiteList[liquidator], "liquidator not in white list");
         }
 
         uint borrowBalance = CToken(cTokenBorrowed).borrowBalanceStored(borrower);
@@ -515,26 +518,26 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
      * @param borrower The address of the borrower
      * @param actualRepayAmount The amount of underlying being repaid
      */
-    function liquidateBorrowVerify(
-        address cTokenBorrowed,
-        address cTokenCollateral,
-        address liquidator,
-        address borrower,
-        uint actualRepayAmount,
-        uint seizeTokens) external {
-        // Shh - currently unused
-        cTokenBorrowed;
-        cTokenCollateral;
-        liquidator;
-        borrower;
-        actualRepayAmount;
-        seizeTokens;
+    // function liquidateBorrowVerify(
+    //     address cTokenBorrowed,
+    //     address cTokenCollateral,
+    //     address liquidator,
+    //     address borrower,
+    //     uint actualRepayAmount,
+    //     uint seizeTokens) external {
+    //     // // Shh - currently unused
+    //     // cTokenBorrowed;
+    //     // cTokenCollateral;
+    //     // liquidator;
+    //     // borrower;
+    //     // actualRepayAmount;
+    //     // seizeTokens;
 
-        // Shh - we don't ever want this hook to be marked pure
-        if (false) {
-            maxAssets = maxAssets;
-        }
-    }
+    //     // // Shh - we don't ever want this hook to be marked pure
+    //     // if (false) {
+    //     //     maxAssets = maxAssets;
+    //     // }
+    // }
 
     /**
      * @notice Checks if the seizing of assets should be allowed to occur
@@ -580,24 +583,24 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
      * @param borrower The address of the borrower
      * @param seizeTokens The number of collateral tokens to seize
      */
-    function seizeVerify(
-        address cTokenCollateral,
-        address cTokenBorrowed,
-        address liquidator,
-        address borrower,
-        uint seizeTokens) external {
-        // Shh - currently unused
-        cTokenCollateral;
-        cTokenBorrowed;
-        liquidator;
-        borrower;
-        seizeTokens;
+    // function seizeVerify(
+    //     address cTokenCollateral,
+    //     address cTokenBorrowed,
+    //     address liquidator,
+    //     address borrower,
+    //     uint seizeTokens) external {
+    //     // // Shh - currently unused
+    //     // cTokenCollateral;
+    //     // cTokenBorrowed;
+    //     // liquidator;
+    //     // borrower;
+    //     // seizeTokens;
 
-        // Shh - we don't ever want this hook to be marked pure
-        if (false) {
-            maxAssets = maxAssets;
-        }
-    }
+    //     // // Shh - we don't ever want this hook to be marked pure
+    //     // if (false) {
+    //     //     maxAssets = maxAssets;
+    //     // }
+    // }
 
     /**
      * @notice Checks if the account should be allowed to transfer tokens in the given market
@@ -633,18 +636,18 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
      * @param dst The account which receives the tokens
      * @param transferTokens The number of cTokens to transfer
      */
-    function transferVerify(address cToken, address src, address dst, uint transferTokens) external {
-        // Shh - currently unused
-        cToken;
-        src;
-        dst;
-        transferTokens;
+    // function transferVerify(address cToken, address src, address dst, uint transferTokens) external {
+    //     // // Shh - currently unused
+    //     // cToken;
+    //     // src;
+    //     // dst;
+    //     // transferTokens;
 
-        // Shh - we don't ever want this hook to be marked pure
-        if (false) {
-            maxAssets = maxAssets;
-        }
-    }
+    //     // // Shh - we don't ever want this hook to be marked pure
+    //     // if (false) {
+    //     //     maxAssets = maxAssets;
+    //     // }
+    // }
 
     /*** Liquidity/Liquidation Calculations ***/
 
@@ -1236,6 +1239,7 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
 
     function getUnclaimedComp(address holder) public view returns (uint256) {
         uint256 unclaimed = compAccrued[holder];
+        uint blockNumber = getBlockNumber();
         
         for (uint256 i = 0; i < allMarkets.length; i++) {
             CToken market = allMarkets[i];
@@ -1244,11 +1248,19 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
             if (supplierTokens > 0) {
                 CompMarketState storage supplyState = compSupplyState[address(market)];
                 Double memory supplyIndex = Double({ mantissa: supplyState.index });
+                uint supplySpeed = compSpeeds[address(market)];
+                uint deltaBlocks = sub_(blockNumber, uint(supplyState.block));
+                if (deltaBlocks > 0 && supplySpeed > 0) {
+                    uint supplyTokens = market.totalSupply();
+                    uint compAccrued = mul_(deltaBlocks, supplySpeed);
+                    Double memory ratio = supplyTokens > 0 ? fraction(compAccrued, supplyTokens) : Double({mantissa: 0});
+                    supplyIndex = add_(supplyIndex, ratio);
+                }
+
                 Double memory supplierIndex = Double({ mantissa: compSupplierIndex[address(market)][holder] });
                 if (supplierIndex.mantissa == 0 && supplyIndex.mantissa > 0) {
                     supplierIndex.mantissa = compInitialIndex;
                 }
-
                 Double memory deltaIndex = sub_(supplyIndex, supplierIndex);
                 uint256 supplierDelta = mul_(supplierTokens, deltaIndex);
                 unclaimed = add_(unclaimed, supplierDelta);
@@ -1259,12 +1271,23 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
             if (borrowerAmount > 0) {
                 CompMarketState storage borrowState = compBorrowState[address(market)];
                 Double memory borrowIndex = Double({ mantissa: borrowState.index });
-                Double memory borrowerIndex = Double({ mantissa: compBorrowerIndex[address(market)][holder] });
-
-                if (borrowerIndex.mantissa > 0) {
-                    Double memory deltaIndex = sub_(borrowIndex, borrowerIndex);
-                    uint256 borrowerDelta = mul_(borrowerAmount, deltaIndex);
-                    unclaimed = add_(unclaimed, borrowerDelta);
+                uint borrowSpeed = compSpeeds[address(market)];
+                uint deltaBlocks = sub_(blockNumber, uint(borrowState.block));
+                if (deltaBlocks > 0 && borrowSpeed > 0) {
+                    uint borrowAmount = div_(market.totalBorrows(), marketBorrowIndex);
+                    uint compAccrued = mul_(deltaBlocks, borrowSpeed);
+                    Double memory ratio = borrowAmount > 0 ? fraction(compAccrued, borrowAmount) : Double({mantissa: 0});
+                    borrowIndex = add_(borrowIndex, ratio);
+                }
+                
+                {
+                    address _holder = holder;
+                    Double memory borrowerIndex = Double({ mantissa: compBorrowerIndex[address(market)][_holder] });
+                    if (borrowerIndex.mantissa > 0) {
+                        Double memory deltaIndex = sub_(borrowIndex, borrowerIndex);
+                        uint256 borrowerDelta = mul_(borrowerAmount, deltaIndex);
+                        unclaimed = add_(unclaimed, borrowerDelta);
+                    }
                 }
             }    
         }
@@ -1329,7 +1352,7 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
      * @return The amount of COMP which was NOT transferred to the user
      */
     function grantCompInternal(address user, uint amount) internal returns (uint) {
-        EIP20Interface token = EIP20Interface(bxhToken);
+        EIP20Interface token = EIP20Interface(getCompAddress());
         uint compRemaining = token.balanceOf(address(this));
         if (amount > 0 && amount <= compRemaining) {
             token.transfer(user, amount);
@@ -1408,5 +1431,9 @@ contract Comptroller is ComptrollerV5Storage, ComptrollerInterface, ComptrollerE
 
     function getBlockNumber() public view returns (uint) {
         return block.number;
+    }
+    
+    function getCompAddress() public pure returns (address) {
+        return 0x6D1B7b59e3fab85B7d3a3d86e505Dd8e349EA7F3;
     }
 }
